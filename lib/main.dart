@@ -479,32 +479,43 @@ class Structure extends StatelessWidget {
     final wide = MediaQuery.of(context).size.width > 1000;
     final general = wingBlock(context, 'General Wing', 'శ్రీ అర్థాల కేశవులు', 'Sri Arthala Kesavulu', navy2, generalCols, const {});
     final women = wingBlock(context, 'Women\'s Wing', 'శ్రీమతి అర్థాల ధన్యవాణి', 'Smt. Arthala Dhanyavani', rose, womenCols, womenNotes);
+    final wings = Column(children: [
+      FractionallySizedBox(widthFactor: .5, child: Container(height: 3, color: gold)),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: general)])),
+        Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: women)])),
+      ]),
+    ]);
     return Column(children: [
-      Container(
-        width: 420,
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(8)),
-        child: Column(children: [
-          const Avatar('Sri Pattabhi Garu', size: 96),
-          const SizedBox(height: 10),
-          Text('Founder / సంస్థ వ్యవస్థాపకులు', style: body(size: 13, color: gold)),
-          const SizedBox(height: 6),
-          Text('శ్రీ పట్టాభి గారు', style: serif(22, color: Colors.white)),
-          Text('Sri Pattabhi Garu', style: body(w: FontWeight.w700, color: Colors.white)),
-        ]),
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(22),
+          decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(8)),
+          child: Column(children: [
+            const Avatar('Sri Pattabhi Garu', size: 96),
+            const SizedBox(height: 10),
+            Text('Founder / సంస్థ వ్యవస్థాపకులు', style: body(size: 13, color: gold)),
+            const SizedBox(height: 6),
+            Text('శ్రీ పట్టాభి గారు', style: serif(22, color: Colors.white)),
+            Text('Sri Pattabhi Garu', style: body(w: FontWeight.w700, color: Colors.white)),
+          ]),
+        ),
       ),
       vline(),
-      if (wide) ...[
-        FractionallySizedBox(widthFactor: .5, child: Container(height: 3, color: gold)),
-        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: general)])),
-          Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: women)])),
-        ]),
-      ] else ...[
-        general,
-        vline(),
-        women,
-      ],
+      if (!wide)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text('Swipe horizontally to view both wings', style: body(size: 13, color: muted)),
+        ),
+      if (wide)
+        wings
+      else
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(width: 1000, child: wings),
+        ),
       vline(),
       level('1. STATE LEVEL · రాష్ట్ర స్థాయి', stateLevel, const Color(0xFF1B6B2B)),
       vline(),

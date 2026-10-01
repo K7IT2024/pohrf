@@ -22,30 +22,25 @@ class PohrfApp extends StatelessWidget {
   const PohrfApp({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'POHRF – Protection of Human Rights Force',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          scaffoldBackgroundColor: paper,
-          colorScheme: ColorScheme.fromSeed(seedColor: navy, primary: navy),
-          textTheme: GoogleFonts.notoSansTextTheme().apply(
-            bodyColor: ink,
-          ),
-        ),
-        home: const HomePage(),
-      );
+    title: 'POHRF – Protection of Human Rights Force',
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(
+      useMaterial3: true,
+      scaffoldBackgroundColor: paper,
+      colorScheme: ColorScheme.fromSeed(seedColor: navy, primary: navy),
+      textTheme: GoogleFonts.notoSansTextTheme().apply(
+          bodyColor: ink, fontFamilyFallback: [GoogleFonts.notoSansTelugu().fontFamily!]),
+    ),
+    home: const HomePage(),
+  );
 }
 
 TextStyle serif(double size, {Color color = ink, FontWeight w = FontWeight.w600}) =>
     GoogleFonts.fraunces(fontSize: size, fontWeight: w, color: color, height: 1.15);
 
 TextStyle body({double size = 16, Color color = ink, FontWeight w = FontWeight.w400}) =>
-    GoogleFonts.notoSansTelugu(
-        fontSize: size,
-        color: color,
-        fontWeight: w,
-        height: 1.6);
-
+    GoogleFonts.notoSans(fontSize: size, color: color, fontWeight: w, height: 1.6)
+        .copyWith(fontFamilyFallback: [GoogleFonts.notoSansTelugu().fontFamily!]);
 
 // ---- Data ----
 class P {
@@ -53,19 +48,37 @@ class P {
   const P(this.role, this.te, this.en);
 }
 
-const generalWing = [
-  P('National Working President', 'శ్రీ G. మోహన్ కుమార్', 'Sri G. Mohan Kumar'),
-  P('Honorary National Working President', 'శ్రీ జ్యోతి ప్రకాష్', 'Sri Jyothi Prakash'),
-  P('National Vice President', 'శ్రీ K. ఏకాంబరం', 'Sri K. Ekambaram'),
-  P('National Working Vice President', 'శ్రీ G. రవి తేజ', 'Sri G. Ravi Teja'),
-  P('National Convener', 'శ్రీ లకేశ్ కుమార్', 'Sri Lakesh Kumar'),
-  P('Legal Cell Vice President', 'శ్రీ B. నాగేశ్వర్ రెడ్డి', 'Sri B. Nageswar Reddy'),
-  P('Spiritual Wing Vice President', 'డాక్టర్ ఉమామహేశ్వర రావు', 'Dr. Umamaheswara Rao'),
-];
-const womenWing = [
-  P('National Working Women\'s President', 'శ్రీమతి G. సంధ్యా రాణి', 'Smt. G. Sandhya Rani'),
-  P('National Women\'s Vice President', 'శ్రీమతి లక్ష్మీ కాంతమ్మ', 'Smt. Lakshmi Kanthamma'),
-];
+const generalCols = <String, List<P>>{
+  'General': [
+    P('National Working President', 'శ్రీ G. మోహన్ కుమార్', 'Sri G. Mohan Kumar'),
+    P('Honorary National Working President', 'శ్రీ జ్యోతి ప్రకాష్', 'Sri Jyothi Prakash'),
+    P('National Vice President', 'శ్రీ K. ఏకాంబరం', 'Sri K. Ekambaram'),
+    P('National Working Vice President', 'శ్రీ G. రవి తేజ', 'Sri G. Ravi Teja'),
+    P('National General Secretary', 'శ్రీ అరుణ్ కుమార్ జేఫాధి', 'Sri Arun Kumar Jephadhi'),
+    P('National Secretary', 'శ్రీ భాస్కర్ ఆచారి', 'Sri Bhaskar Achari'),
+    P('National Deputy Secretary', 'శ్రీ పాంబి వాసు', 'Sri Pambi Vasu'),
+    P('POHRF National Convener', 'శ్రీ లికిత్ కుమార్', 'Sri Likith Kumar'),
+  ],
+  'Legal': [
+    P('National Legal Cell Vice President', 'శ్రీ B. నాగేశ్వర్ రెడ్డి', 'Sri B. Nageswar Reddy'),
+  ],
+  'Spiritual': [
+    P('Spiritual Wing Vice President', 'డాక్టర్ ఉమామహేశ్వర రావు', 'Dr. Umamaheswara Rao'),
+  ],
+};
+const womenCols = <String, List<P>>{
+  'General': [
+    P('National Working Women\'s President', 'శ్రీమతి G. సంధ్యా రాణి', 'Smt. G. Sandhya Rani'),
+    P('National Women\'s Vice President', 'శ్రీమతి లక్ష్మీ కాంతమ్మ', 'Smt. Lakshmi Kanthamma'),
+  ],
+  'Legal': <P>[],
+  'Spiritual': <P>[],
+};
+const womenNotes = {
+  'General': 'Other national women representatives',
+  'Legal': 'Office bearers to be announced',
+  'Spiritual': 'National women\'s spiritual wing representatives',
+};
 const stateLevel = [
   P('AP General President', 'శ్రీ M. బాబు', 'Sri M. Babu'),
   P('AP Women\'s President', 'శ్రీమతి G. బిందు ప్రియ', 'Smt. G. Bindu Priya'),
@@ -79,12 +92,12 @@ const zonalLevel = [
 const districts = <String, List<P>>{
   'Tirupati District': [
     P('District Honorary President', 'శ్రీ మానేరి లోకనాధం', 'Sri Maneri Lokanadham'),
-    P('District President (General)', 'శ్రీ టి. సాయి తరుణ్', 'Sri T. Sai Tarun'),
+    P('District President (General)', 'శ్రీ టి. సాయి తరుణ్', 'Sri T. Sai Tharun'),
     P('District Women\'s President', 'డాక్టర్ బి. ఈశ్వరి', 'Dr. B. Eswari'),
     P('District Women\'s Working President', 'శ్రీమతి P. లక్ష్మి', 'Smt. P. Lakshmi'),
     P('District Vice President', 'శ్రీ పెట నరేష్', 'Sri Peta Naresh'),
     P('District Women\'s Vice President', 'శ్రీమతి కొండేటి జ్యోతి', 'Smt. Kondeti Jyothi'),
-    P('District Secretary', 'శ్రీ ఎం. వాను', 'Sri M. Vanu'),
+    P('District Secretary', 'శ్రీ ఎం. వాసు', 'Sri M. Vasu'),
     P('District Women\'s Secretary', 'శ్రీమతి పి. సురేఖ', 'Smt. P. Surekha'),
     P('District Joint Secretary', 'శ్రీ డి. రవీంద్ర ఆచారి', 'Sri D. Ravindra Achari'),
     P('District Women\'s Convener', 'శ్రీమతి కాపరి రేఖ', 'Smt. Kapari Rekha'),
@@ -154,17 +167,17 @@ class _HomePageState extends State<HomePage> {
         ]),
         actions: wide
             ? [
-                for (final k in keys.keys)
-                  TextButton(onPressed: () => go(k), child: Text(k == 'Join' ? 'Take action' : k, style: body(color: Colors.white, size: 14))),
-                const SizedBox(width: 12),
-              ]
+          for (final k in keys.keys)
+            TextButton(onPressed: () => go(k), child: Text(k == 'Join' ? 'Take action' : k, style: body(color: Colors.white, size: 14))),
+          const SizedBox(width: 12),
+        ]
             : [
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.menu),
-                  onSelected: go,
-                  itemBuilder: (_) => [for (final k in keys.keys) PopupMenuItem(value: k, child: Text(k == 'Join' ? 'Take action' : k))],
-                ),
-              ],
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.menu),
+            onSelected: go,
+            itemBuilder: (_) => [for (final k in keys.keys) PopupMenuItem(value: k, child: Text(k == 'Join' ? 'Take action' : k))],
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(children: [
@@ -187,11 +200,11 @@ class Logo extends StatelessWidget {
   const Logo(this.size, {super.key});
   @override
   Widget build(BuildContext context) => Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: gold, width: size > 100 ? 5 : 2)),
-        child: ClipOval(child: Image.asset('assets/logo.png', fit: BoxFit.cover)),
-      );
+    width: size,
+    height: size,
+    decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: gold, width: size > 100 ? 5 : 2)),
+    child: ClipOval(child: Image.asset('assets/logo.png', fit: BoxFit.cover)),
+  );
 }
 
 class Wrap1080 extends StatelessWidget {
@@ -199,8 +212,8 @@ class Wrap1080 extends StatelessWidget {
   const Wrap1080(this.child, {super.key});
   @override
   Widget build(BuildContext context) => Center(
-        child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 1080), child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: child)),
-      );
+    child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 1080), child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: child)),
+  );
 }
 
 class HeroBanner extends StatelessWidget {
@@ -244,17 +257,17 @@ class Section extends StatelessWidget {
   const Section({super.key, required this.title, required this.lead, required this.child, this.bg = paper});
   @override
   Widget build(BuildContext context) => Container(
-        color: bg,
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 64),
-        child: Wrap1080(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title, style: serif(34)),
-          const SizedBox(height: 8),
-          ConstrainedBox(constraints: const BoxConstraints(maxWidth: 640), child: Text(lead, style: body(color: muted))),
-          const SizedBox(height: 28),
-          child,
-        ])),
-      );
+    color: bg,
+    width: double.infinity,
+    padding: const EdgeInsets.symmetric(vertical: 64),
+    child: Wrap1080(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(title, style: serif(34)),
+      const SizedBox(height: 8),
+      ConstrainedBox(constraints: const BoxConstraints(maxWidth: 640), child: Text(lead, style: body(color: muted))),
+      const SizedBox(height: 28),
+      child,
+    ])),
+  );
 }
 
 class Cards extends StatelessWidget {
@@ -263,20 +276,85 @@ class Cards extends StatelessWidget {
   const Cards(this.items, this.accent, {super.key});
   @override
   Widget build(BuildContext context) => Wrap(spacing: 24, runSpacing: 24, children: [
-        for (final i in items)
-          SizedBox(
-            width: 320,
-            child: Container(
-              padding: const EdgeInsets.only(top: 16),
-              decoration: BoxDecoration(border: Border(top: BorderSide(color: accent, width: 3))),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(i[0], style: serif(20)),
-                const SizedBox(height: 6),
-                Text(i[1], style: body(color: muted)),
-              ]),
-            ),
-          ),
-      ]);
+    for (final i in items)
+      SizedBox(
+        width: 320,
+        child: Container(
+          padding: const EdgeInsets.only(top: 16),
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: accent, width: 3))),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(i[0], style: serif(20)),
+            const SizedBox(height: 6),
+            Text(i[1], style: body(color: muted)),
+          ]),
+        ),
+      ),
+  ]);
+}
+
+String slug(String en) => en
+    .toLowerCase()
+    .replaceAll(RegExp(r'^(sri|smt|dr)\b\.?'), '')
+    .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
+    .replaceAll(RegExp(r'^_+|_+$'), '');
+
+const teamPhotos = <String, String>{
+  'arthala_kesavulu': 'kesav.jpeg',
+  'arthala_dhanyavani': 'Dhanyavani.jpeg',
+  'pattabhi_garu': 'pattabbi.jpeg',
+  'g_ravi_teja': 'RaviTeja.jpeg',
+  'likith_kumar': 'Likithkumar.jpeg',
+  'b_nageswar_reddy': 'NageshwarReddy.jpeg',
+  'g_sandhya_rani': 'SandhyaRani.jpeg',
+  'lakshmi_kanthamma': 'LakshmiKanthama.jpeg',
+  'm_babu': 'Babu.jpeg',
+  'g_bindu_priya': 'Bindhu.jpeg',
+  'k_vidya_sri': 'VidhyaSri.jpeg',
+  'maneri_lokanadham': 'Lokanadham.jpeg',
+  'b_eswari': 'Eeshwari.jpeg',
+  'p_lakshmi': 'P.Lakshmi.jpeg',
+  'peta_naresh': 'Naresh.jpeg',
+  'm_vasu': 'Vasu.jpeg',
+  'a_surendra': 'Surendra.jpeg',
+};
+
+String initials(String en) {
+  final w = en
+      .replaceAll(RegExp(r'^(Sri|Smt\.|Dr\.)\s+'), '')
+      .split(' ')
+      .where((x) => x.isNotEmpty && !RegExp(r'^([A-Za-z]\.)+$').hasMatch(x))
+      .toList();
+  return w.take(2).map((x) => x[0].toUpperCase()).join();
+}
+
+class Avatar extends StatelessWidget {
+  final String en;
+  final double size;
+  const Avatar(this.en, {super.key, this.size = 56});
+  @override
+  Widget build(BuildContext context) {
+    final fallback = Container(
+          color: navy2,
+          alignment: Alignment.center,
+          child: Text(initials(en), style: body(color: Colors.white, w: FontWeight.w700, size: size * .34)),
+        );
+    final photo = teamPhotos[slug(en)];
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: gold, width: 2)),
+      child: ClipOval(
+        child: photo == null
+            ? fallback
+            : Image.asset(
+                'assets/team/$photo',
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+                errorBuilder: (_, __, ___) => fallback,
+              ),
+      ),
+    );
+  }
 }
 
 class PersonRow extends StatelessWidget {
@@ -285,90 +363,160 @@ class PersonRow extends StatelessWidget {
   const PersonRow(this.p, {super.key, this.color});
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Avatar(p.en),
+      const SizedBox(width: 12),
+      Expanded(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(p.role, style: body(size: 13, color: color ?? muted)),
           Text(p.te, style: body(w: FontWeight.w700, color: color ?? ink)),
           Text(p.en, style: body(w: FontWeight.w700, color: color ?? ink)),
         ]),
-      );
+      ),
+    ]),
+  );
 }
 
 class Structure extends StatelessWidget {
   const Structure({super.key});
-  Widget wing(String name, String headTe, String headEn, List<P> list, Color c) => Container(
-        width: 480,
-        padding: const EdgeInsets.all(22),
-        decoration: BoxDecoration(color: Colors.white, border: Border.all(color: line), borderRadius: BorderRadius.circular(8)),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(height: 6, width: 60, color: c),
-          const SizedBox(height: 12),
-          Text(name, style: serif(22)),
-          const SizedBox(height: 4),
-          Text('National head', style: body(size: 13, color: muted)),
-          Text(headTe, style: body(w: FontWeight.w700)),
-          Text(headEn, style: body(w: FontWeight.w700)),
-          const Divider(height: 28),
-          for (final p in list) PersonRow(p),
-        ]),
-      );
-
-  Widget level(String title, List<P> list) => Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(color: Colors.white, border: Border(left: const BorderSide(color: gold, width: 6), top: BorderSide(color: line), right: BorderSide(color: line), bottom: BorderSide(color: line))),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title, style: serif(19)),
-          const SizedBox(height: 6),
-          Wrap(spacing: 32, runSpacing: 4, children: [for (final p in list) SizedBox(width: 300, child: PersonRow(p))]),
-        ]),
-      );
-
-  @override
-  Widget build(BuildContext context) => Column(children: [
+  Widget wingBlock(BuildContext context, String name, String headTe, String headEn, Color c,
+      Map<String, List<P>> cols, Map<String, String> notes) {
+    const icons = {'General': Icons.groups, 'Legal': Icons.gavel, 'Spiritual': Icons.self_improvement};
+    return Container(
+      decoration: BoxDecoration(color: Colors.white, border: Border.all(color: line), borderRadius: BorderRadius.circular(10)),
+      child: Column(children: [
         Container(
-          width: 420,
-          padding: const EdgeInsets.all(22),
-          decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(8)),
-          child: Column(children: [
-            Text('Founder / సంస్థ వ్యవస్థాపకులు', style: body(size: 13, color: gold)),
-            const SizedBox(height: 6),
-            Text('శ్రీ పట్టాభి గారు', style: serif(22, color: Colors.white)),
-            Text('Sri Pattabhi Garu', style: body(w: FontWeight.w700, color: Colors.white)),
+          width: double.infinity,
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(color: c, borderRadius: const BorderRadius.vertical(top: Radius.circular(9))),
+          child: Row(children: [
+            Avatar(headEn, size: 72),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(name.toUpperCase(), style: serif(24, color: Colors.white)),
+                const SizedBox(height: 4),
+                Text('National head', style: body(size: 13, color: Colors.white70)),
+                Text(headTe, style: body(w: FontWeight.w700, color: Colors.white)),
+                Text(headEn, style: body(w: FontWeight.w700, color: Colors.white)),
+              ]),
+            ),
           ]),
         ),
-        const SizedBox(height: 24),
-        Wrap(spacing: 20, runSpacing: 20, children: [
-          wing('General Wing', 'శ్రీ అర్థాల కేశవులు', 'Sri Arthala Kesavulu', generalWing, navy2),
-          wing('Women\'s Wing', 'శ్రీమతి అర్థాల ధన్యవాణి', 'Smt. Arthala Dhanyavani', womenWing, rose),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(40, 16, 16, 2),
+          child: Stack(clipBehavior: Clip.none, children: [
+            Positioned(left: -24, top: 0, bottom: 28, child: Container(width: 3, color: c)),
+            Column(children: [
+              for (final e in cols.entries)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: Stack(clipBehavior: Clip.none, children: [
+                    Positioned(left: -24, top: 22, child: Container(width: 24, height: 3, color: c)),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(color: c.withValues(alpha: .06), border: Border.all(color: line), borderRadius: BorderRadius.circular(8)),
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Row(children: [
+                          Icon(icons[e.key], color: c),
+                          const SizedBox(width: 8),
+                          Text(e.key.toUpperCase(), style: body(w: FontWeight.w700, color: c)),
+                        ]),
+                        const Divider(height: 20),
+                        if (e.value.isEmpty) Text(notes[e.key] ?? '', style: body(size: 14, color: muted)),
+                        for (final p in e.value) PersonRow(p),
+                      ]),
+                    ),
+                  ]),
+                ),
+            ]),
+          ]),
+        ),
+      ]),
+    );
+  }
+
+  Widget vline([double h = 32]) => Center(child: Container(width: 3, height: h, color: gold));
+
+  Widget level(String title, List<P> list, Color c, {String? note}) => Container(
+    width: double.infinity,
+    padding: const EdgeInsets.all(18),
+    decoration: BoxDecoration(color: Colors.white, border: Border.all(color: c, width: 2), borderRadius: BorderRadius.circular(8)),
+    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+        decoration: BoxDecoration(color: c, borderRadius: BorderRadius.circular(20)),
+        child: Text(title, style: body(w: FontWeight.w700, color: Colors.white)),
+      ),
+      const SizedBox(height: 8),
+      if (note != null) Text(note, style: body(color: muted)),
+      Wrap(spacing: 32, runSpacing: 4, children: [for (final p in list) SizedBox(width: 340, child: PersonRow(p))]),
+    ]),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final wide = MediaQuery.of(context).size.width > 1000;
+    final general = wingBlock(context, 'General Wing', 'శ్రీ అర్థాల కేశవులు', 'Sri Arthala Kesavulu', navy2, generalCols, const {});
+    final women = wingBlock(context, 'Women\'s Wing', 'శ్రీమతి అర్థాల ధన్యవాణి', 'Smt. Arthala Dhanyavani', rose, womenCols, womenNotes);
+    return Column(children: [
+      Container(
+        width: 420,
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(8)),
+        child: Column(children: [
+          const Avatar('Sri Pattabhi Garu', size: 96),
+          const SizedBox(height: 10),
+          Text('Founder / సంస్థ వ్యవస్థాపకులు', style: body(size: 13, color: gold)),
+          const SizedBox(height: 6),
+          Text('శ్రీ పట్టాభి గారు', style: serif(22, color: Colors.white)),
+          Text('Sri Pattabhi Garu', style: body(w: FontWeight.w700, color: Colors.white)),
         ]),
-        const SizedBox(height: 28),
-        level('1. State level', stateLevel),
-        const SizedBox(height: 14),
-        level('2. Zonal level', zonalLevel),
-      ]);
+      ),
+      vline(),
+      if (wide) ...[
+        FractionallySizedBox(widthFactor: .5, child: Container(height: 3, color: gold)),
+        Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: general)])),
+          Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: women)])),
+        ]),
+      ] else ...[
+        general,
+        vline(),
+        women,
+      ],
+      vline(),
+      level('1. STATE LEVEL · రాష్ట్ర స్థాయి', stateLevel, const Color(0xFF1B6B2B)),
+      vline(),
+      level('2. ZONAL LEVEL · జోనల్ స్థాయి', zonalLevel, const Color(0xFFD9540B)),
+      vline(),
+      level('3. DISTRICT LEVEL · జిల్లా స్థాయి', const [], navy2, note: 'Tirupati · Nellore · Chittoor · Vizag · West Godavari (see District teams below)'),
+    ]);
+  }
 }
 
 class Districts extends StatelessWidget {
   const Districts({super.key});
   @override
   Widget build(BuildContext context) => Column(children: [
-        for (final e in districts.entries)
-          Card(
-            elevation: 0,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(side: const BorderSide(color: line), borderRadius: BorderRadius.circular(8)),
-            child: ExpansionTile(
-              initiallyExpanded: e.key.startsWith('Tirupati'),
-              shape: const Border(),
-              collapsedShape: const Border(),
-              title: Text(e.key, style: body(w: FontWeight.w600)),
-              childrenPadding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
-              expandedCrossAxisAlignment: CrossAxisAlignment.start,
-              children: [Wrap(spacing: 32, children: [for (final p in e.value) SizedBox(width: 300, child: PersonRow(p))])],
-            ),
-          ),
-      ]);
+    for (final e in districts.entries)
+      Card(
+        elevation: 0,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(side: const BorderSide(color: line), borderRadius: BorderRadius.circular(8)),
+        child: ExpansionTile(
+          initiallyExpanded: e.key.startsWith('Tirupati'),
+          shape: const Border(),
+          collapsedShape: const Border(),
+          title: Text(e.key, style: body(w: FontWeight.w600)),
+          childrenPadding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+          expandedCrossAxisAlignment: CrossAxisAlignment.start,
+          children: [Wrap(spacing: 32, children: [for (final p in e.value) SizedBox(width: 340, child: PersonRow(p))])],
+        ),
+      ),
+  ]);
 }
 
 class Contact extends StatefulWidget {
@@ -397,51 +545,51 @@ class _ContactState extends State<Contact> {
 
   @override
   Widget build(BuildContext context) => Container(
-        color: navy,
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 64),
-        child: Wrap1080(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Join us or report a violation', style: serif(34, color: Colors.white)),
-          const SizedBox(height: 8),
-          Text('Tell us what happened, or how you want to help. We will get back to you.', style: body(color: const Color(0xFFC9D1EC))),
-          const SizedBox(height: 28),
-          Wrap(spacing: 40, runSpacing: 28, children: [
-            SizedBox(
-              width: 480,
-              child: Column(children: [
-                TextField(controller: name, style: body(color: Colors.white), decoration: deco('Your name')),
-                const SizedBox(height: 12),
-                TextField(controller: phone, keyboardType: TextInputType.phone, style: body(color: Colors.white), decoration: deco('Phone number')),
-                const SizedBox(height: 12),
-                TextField(controller: msg, maxLines: 4, style: body(color: Colors.white), decoration: deco('Message')),
-                const SizedBox(height: 16),
-                Align(alignment: Alignment.centerLeft, child: FilledButton(style: FilledButton.styleFrom(backgroundColor: gold, foregroundColor: navy, padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)), onPressed: send, child: const Text('Send message'))),
-              ]),
-            ),
-            SizedBox(
-              width: 360,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('Contact', style: serif(22, color: Colors.white)),
-                const SizedBox(height: 8),
-                Text('Email: $kEmail\nPhone: $kPhone\nHead office: $kAddress', style: body(color: Colors.white)),
-                const SizedBox(height: 12),
-                Text('In an emergency, call your local police helpline (112) first.', style: body(color: const Color(0xFFC9D1EC))),
-              ]),
-            ),
+    color: navy,
+    width: double.infinity,
+    padding: const EdgeInsets.symmetric(vertical: 64),
+    child: Wrap1080(Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Join us or report a violation', style: serif(34, color: Colors.white)),
+      const SizedBox(height: 8),
+      Text('Tell us what happened, or how you want to help. We will get back to you.', style: body(color: const Color(0xFFC9D1EC))),
+      const SizedBox(height: 28),
+      Wrap(spacing: 40, runSpacing: 28, children: [
+        SizedBox(
+          width: 480,
+          child: Column(children: [
+            TextField(controller: name, style: body(color: Colors.white), decoration: deco('Your name')),
+            const SizedBox(height: 12),
+            TextField(controller: phone, keyboardType: TextInputType.phone, style: body(color: Colors.white), decoration: deco('Phone number')),
+            const SizedBox(height: 12),
+            TextField(controller: msg, maxLines: 4, style: body(color: Colors.white), decoration: deco('Message')),
+            const SizedBox(height: 16),
+            Align(alignment: Alignment.centerLeft, child: FilledButton(style: FilledButton.styleFrom(backgroundColor: gold, foregroundColor: navy, padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)), onPressed: send, child: const Text('Send message'))),
           ]),
-        ])),
-      );
+        ),
+        SizedBox(
+          width: 360,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Contact', style: serif(22, color: Colors.white)),
+            const SizedBox(height: 8),
+            Text('Email: $kEmail\nPhone: $kPhone\nHead office: $kAddress', style: body(color: Colors.white)),
+            const SizedBox(height: 12),
+            Text('In an emergency, call your local police helpline (112) first.', style: body(color: const Color(0xFFC9D1EC))),
+          ]),
+        ),
+      ]),
+    ])),
+  );
 }
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24),
-        child: Column(children: [
-          const Logo(40),
-          const SizedBox(height: 8),
-          Text('© 2026 Protection of Human Rights Force (POHRF)', style: body(size: 14, color: muted)),
-        ]),
-      );
+    padding: const EdgeInsets.symmetric(vertical: 24),
+    child: Column(children: [
+      const Logo(40),
+      const SizedBox(height: 8),
+      Text('© 2026 Protection of Human Rights Force (POHRF)', style: body(size: 14, color: muted)),
+    ]),
+  );
 }

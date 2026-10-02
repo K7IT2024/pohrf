@@ -111,7 +111,7 @@ const districts = <String, List<P>>{
     P('District Working President', 'శ్రీ A. నవీన్ కుమార్', 'Sri A. Naveen Kumar'),
   ],
   'Chittoor District': [
-    P('District Vice President', 'శ్రీ P. ద్దీడ్డి', 'Sri P. Deddi'),
+    P('District Vice President', 'శ్రీ P. దిల్లీ', 'Sri P. Dilli'),
     P('District Convener', 'శ్రీ K. నరేష్', 'Sri K. Naresh'),
   ],
   'Vizag District': [P('District President', 'శ్రీ ఇండియన్ శ్రీనివాస్', 'Sri Indian Srinivas')],
@@ -338,6 +338,7 @@ const teamPhotos = <String, String>{
   'indian_srinivas': 'IndianSrinivas.jpeg',
   'a_naveen_kumar': 'NaveenKumar.jpeg',
   'k_naresh': 'K.Naresh.jpeg',
+  'p_dilli': 'p.Dilli.jpeg',
   'm_siva_ramakrishna': 'SivaRamakrishna.jpeg',
 };
 

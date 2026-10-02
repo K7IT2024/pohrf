@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 // ---- Edit these ----
-const kEmail = 'info@pohrf.org';
-const kPhone = '+91 00000 00000';
+const kEmail = 'protectionofhumanrightforce@gmail.com';
+const kPhone = '+91 86397 90547';
 const kAddress = 'Add your head office address here';
 
 const navy = Color(0xFF0B1D4A);
@@ -303,7 +305,7 @@ const teamPhotos = <String, String>{
   'arthala_dhanyavani': 'Dhanyavani.jpeg',
   'pattabhi_garu': 'pattabbi.jpeg',
   'g_mohan_kumar': 'Mohankumar.jpeg',
-  'jyothi_prakash': 'ReddiJyothi.jpeg',
+  'jyothi_prakash': 'JyothiPrakash.jpeg',
   'k_ekambaram': 'Ekambaram.jpeg',
   'g_ravi_teja': 'RaviTeja.jpeg',
   'arun_kumar_jephadhi': 'ArunKumar.jpeg',
@@ -334,6 +336,9 @@ const teamPhotos = <String, String>{
   'k_dhanush': 'Dhanush.jpeg',
   'a_surendra': 'Surendra.jpeg',
   'indian_srinivas': 'IndianSrinivas.jpeg',
+  'a_naveen_kumar': 'NaveenKumar.jpeg',
+  'k_naresh': 'K.Naresh.jpeg',
+  'm_siva_ramakrishna': 'SivaRamakrishna.jpeg',
 };
 
 String initials(String en) {
@@ -555,16 +560,70 @@ class Contact extends StatefulWidget {
 }
 
 class _ContactState extends State<Contact> {
+  final formKey = GlobalKey<FormState>();
   final name = TextEditingController(), phone = TextEditingController(), msg = TextEditingController();
+  bool sending = false;
 
   Future<void> send() async {
-    final uri = Uri(scheme: 'mailto', path: kEmail, queryParameters: {
-      'subject': 'POHRF enquiry',
-      'body': 'Name: ${name.text}\nPhone: ${phone.text}\n\n${msg.text}',
-    });
-    if (!await launchUrl(uri) && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open your email app. Please write to $kEmail')));
+    if (sending || !formKey.currentState!.validate()) return;
+    setState(() => sending = true);
+    try {
+      final response = await http.post(
+        Uri.https('formsubmit.co', '/ajax/$kEmail'),
+        headers: const {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'name': name.text.trim(),
+          'phone': phone.text.trim(),
+          'message': msg.text.trim(),
+          '_subject': 'POHRF website enquiry',
+        }),
+      );
+      final result = jsonDecode(response.body);
+      if (response.statusCode < 200 ||
+          response.statusCode >= 300 ||
+          result is! Map ||
+          result['success'] != 'true') {
+        throw StateError('FormSubmit did not accept the message (${response.statusCode}).');
+      }
+      if (!mounted) return;
+      name.clear();
+      phone.clear();
+      msg.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Your message was sent. Thank you.')),
+      );
+    } on http.ClientException {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not send your message. Please try again later.')),
+        );
+      }
+    } on FormatException {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The email service returned an unexpected response. Please try again later.')),
+        );
+      }
+    } on StateError {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The email service could not accept your message. Please try again later.')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => sending = false);
     }
+  }
+
+  @override
+  void dispose() {
+    name.dispose();
+    phone.dispose();
+    msg.dispose();
+    super.dispose();
   }
 
   InputDecoration deco(String l) => InputDecoration(
@@ -585,15 +644,36 @@ class _ContactState extends State<Contact> {
       Wrap(spacing: 40, runSpacing: 28, children: [
         SizedBox(
           width: 480,
-          child: Column(children: [
-            TextField(controller: name, style: body(color: Colors.white), decoration: deco('Your name')),
-            const SizedBox(height: 12),
-            TextField(controller: phone, keyboardType: TextInputType.phone, style: body(color: Colors.white), decoration: deco('Phone number')),
-            const SizedBox(height: 12),
-            TextField(controller: msg, maxLines: 4, style: body(color: Colors.white), decoration: deco('Message')),
-            const SizedBox(height: 16),
-            Align(alignment: Alignment.centerLeft, child: FilledButton(style: FilledButton.styleFrom(backgroundColor: gold, foregroundColor: navy, padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)), onPressed: send, child: const Text('Send message'))),
-          ]),
+          child: Form(
+            key: formKey,
+            child: Column(children: [
+              TextFormField(
+                controller: name,
+                style: body(color: Colors.white),
+                decoration: deco('Your name'),
+                validator: (value) => value == null || value.trim().isEmpty ? 'Enter your name' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(controller: phone, keyboardType: TextInputType.phone, style: body(color: Colors.white), decoration: deco('Phone number')),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: msg,
+                maxLines: 4,
+                style: body(color: Colors.white),
+                decoration: deco('Message'),
+                validator: (value) => value == null || value.trim().isEmpty ? 'Enter a message' : null,
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(backgroundColor: gold, foregroundColor: navy, padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16)),
+                  onPressed: sending ? null : send,
+                  child: Text(sending ? 'Sending…' : 'Send message'),
+                ),
+              ),
+            ]),
+          ),
         ),
         SizedBox(
           width: 360,

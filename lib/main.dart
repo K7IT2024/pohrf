@@ -52,14 +52,14 @@ class P {
 
 const generalCols = <String, List<P>>{
   'General': [
-    P('National Working President', 'శ్రీ G. మోహన్ కుమార్', 'Sri G. Mohan Kumar'),
-    P('Honorary National Working President', 'శ్రీ జ్యోతి ప్రకాష్', 'Sri Jyothi Prakash'),
     P('National Vice President', 'శ్రీ K. ఏకాంబరం', 'Sri K. Ekambaram'),
+    P('Honorary National Working President', 'శ్రీ జ్యోతి ప్రకాష్', 'Sri Jyothi Prakash'),
+    P('National Working President', 'శ్రీ G. మోహన్ కుమార్', 'Sri G. Mohan Kumar'),
     P('National Working Vice President', 'శ్రీ G. రవి తేజ', 'Sri G. Ravi Teja'),
     P('National General Secretary', 'శ్రీ అరుణ్ కుమార్ జేఫాధి', 'Sri Arun Kumar Jephadhi'),
-    P('National Secretary', 'శ్రీ భాస్కర్ ఆచారి', 'Sri Bhaskar Achari'),
-    P('National Deputy Secretary', 'శ్రీ పాంబి వాసు', 'Sri Pambi Vasu'),
     P('POHRF National Convener', 'శ్రీ లికిత్ కుమార్', 'Sri Likith Kumar'),
+    P('National Deputy Secretary', 'శ్రీ పాంబి వాసు', 'Sri Pambi Vasu'),
+    P('National Secretary', 'శ్రీ భాస్కర్ ఆచారి', 'Sri Bhaskar Achari'),
   ],
   'Legal': [
     P('National Legal Cell Vice President', 'శ్రీ B. నాగేశ్వర్ రెడ్డి', 'Sri B. Nageswar Reddy'),

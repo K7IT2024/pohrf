@@ -148,7 +148,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final keys = {for (final k in ['Rights', 'What we do', 'Goals', 'Structure', 'Districts', 'Join']) k: GlobalKey()};
+  final keys = {for (final k in ['Rights', 'What we do', 'Goals', 'Structure', 'Districts', 'Supporters', 'Join']) k: GlobalKey()};
   void go(String k) {
     final c = keys[k]!.currentContext;
     if (c != null) Scrollable.ensureVisible(c, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
@@ -189,6 +189,13 @@ class _HomePageState extends State<HomePage> {
           Section(key: keys['Goals'], title: 'Our goal  /  మన లక్ష్యం', lead: 'Six commitments guide every POHRF team.', child: Cards(goals, navy2)),
           Section(key: keys['Structure'], bg: Colors.white, title: 'How POHRF is organised', lead: 'One founder, two national wings, and teams at state, zonal and district level.', child: const Structure()),
           Section(key: keys['Districts'], title: 'District teams', lead: 'Tap a district to see its office bearers.', child: const Districts()),
+          Section(
+            key: keys['Supporters'],
+            bg: Colors.white,
+            title: 'Sponsors & special thanks',
+            lead: 'We gratefully acknowledge the organizations and individuals supporting the Protection of Human Rights Force (POHRF).',
+            child: const Supporters(),
+          ),
           Contact(key: keys['Join']),
           const Footer(),
         ]),
@@ -205,7 +212,7 @@ class Logo extends StatelessWidget {
     width: size,
     height: size,
     decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: gold, width: size > 100 ? 5 : 2)),
-    child: ClipOval(child: Image.asset('assets/logo.png', fit: BoxFit.cover)),
+    child: ClipOval(child: Image.asset('assets/pohrf_logo.jpeg', fit: BoxFit.cover)),
   );
 }
 
@@ -552,6 +559,103 @@ class Districts extends StatelessWidget {
         ),
       ),
   ]);
+}
+
+class Supporters extends StatelessWidget {
+  const Supporters({super.key});
+
+  Widget supporterCard({
+    required Widget mark,
+    required String name,
+    required String detail,
+  }) =>
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(22),
+        decoration: BoxDecoration(
+          color: paper,
+          border: Border.all(color: line),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 88, child: mark),
+            const SizedBox(height: 18),
+            Text(name, style: serif(21)),
+            const SizedBox(height: 8),
+            Text(detail, style: body(color: muted)),
+          ],
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, constraints) {
+          final cardWidth = constraints.maxWidth > 700
+              ? 340.0
+              : constraints.maxWidth >= 560
+                  ? (constraints.maxWidth - 16) / 2
+                  : constraints.maxWidth;
+          return Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            children: [
+              SizedBox(
+                width: cardWidth,
+                child: supporterCard(
+                  mark: Container(
+                    width: 88,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: navy,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'K7',
+                      style: serif(38, color: gold, w: FontWeight.w800),
+                    ),
+                  ),
+                  name: 'K7InfoTech',
+                  detail: 'A sponsorship partner of POHRF.',
+                ),
+              ),
+              SizedBox(
+                width: cardWidth,
+                child: supporterCard(
+                  mark: Container(
+                    width: 88,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: navy2,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(
+                      Icons.volunteer_activism,
+                      color: gold,
+                      size: 42,
+                    ),
+                  ),
+                  name: 'Arthala Alleiah Charitable Trust',
+                  detail: 'A sponsorship partner of POHRF.',
+                ),
+              ),
+              SizedBox(
+                width: cardWidth,
+                child: supporterCard(
+                  mark: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Avatar('Smt. Arthala Dhanyavani', size: 84),
+                  ),
+                  name: 'Special thanks to S. Dhanyavani',
+                  detail:
+                      'With gratitude for her contribution and support to POHRF.',
+                ),
+              ),
+            ],
+          );
+        },
+      );
 }
 
 class Contact extends StatefulWidget {

@@ -665,12 +665,11 @@ class Contact extends StatefulWidget {
 }
 
 class _ContactState extends State<Contact> {
-  final formKey = GlobalKey<FormState>();
   final name = TextEditingController(), phone = TextEditingController(), msg = TextEditingController();
   bool sending = false;
 
   Future<void> send() async {
-    if (sending || !formKey.currentState!.validate()) return;
+    if (sending) return;
     setState(() => sending = true);
     try {
       final response = await http.post(
@@ -687,11 +686,29 @@ class _ContactState extends State<Contact> {
         }),
       );
       final result = jsonDecode(response.body);
+      final successValue = result is Map ? result['success'] : null;
+      final accepted = successValue == true ||
+          successValue?.toString().toLowerCase() == 'true';
       if (response.statusCode < 200 ||
           response.statusCode >= 300 ||
-          result is! Map ||
-          result['success'] != 'true') {
-        throw StateError('FormSubmit did not accept the message (${response.statusCode}).');
+          !accepted) {
+        final serviceMessage =
+            result is Map && result['message'] is String
+                ? (result['message'] as String).trim()
+                : '';
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                serviceMessage.isEmpty
+                    ? 'The email service rejected the message. Confirm $kEmail is activated with FormSubmit, then try again.'
+                    : '$serviceMessage Check that $kEmail is activated with FormSubmit.',
+              ),
+              duration: const Duration(seconds: 8),
+            ),
+          );
+        }
+        return;
       }
       if (!mounted) return;
       name.clear();
@@ -710,12 +727,6 @@ class _ContactState extends State<Contact> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('The email service returned an unexpected response. Please try again later.')),
-        );
-      }
-    } on StateError {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('The email service could not accept your message. Please try again later.')),
         );
       }
     } finally {
@@ -749,24 +760,16 @@ class _ContactState extends State<Contact> {
       Wrap(spacing: 40, runSpacing: 28, children: [
         SizedBox(
           width: 480,
-          child: Form(
-            key: formKey,
-            child: Column(children: [
-              TextFormField(
-                controller: name,
-                style: body(color: Colors.white),
-                decoration: deco('Your name'),
-                validator: (value) => value == null || value.trim().isEmpty ? 'Enter your name' : null,
-              ),
+          child: Column(children: [
+              TextField(controller: name, style: body(color: Colors.white), decoration: deco('Your name (optional)')),
               const SizedBox(height: 12),
-              TextFormField(controller: phone, keyboardType: TextInputType.phone, style: body(color: Colors.white), decoration: deco('Phone number')),
+              TextField(controller: phone, keyboardType: TextInputType.phone, style: body(color: Colors.white), decoration: deco('Phone number (optional)')),
               const SizedBox(height: 12),
-              TextFormField(
+              TextField(
                 controller: msg,
                 maxLines: 4,
                 style: body(color: Colors.white),
-                decoration: deco('Message'),
-                validator: (value) => value == null || value.trim().isEmpty ? 'Enter a message' : null,
+                decoration: deco('Message (optional)'),
               ),
               const SizedBox(height: 16),
               Align(
@@ -778,7 +781,6 @@ class _ContactState extends State<Contact> {
                 ),
               ),
             ]),
-          ),
         ),
         SizedBox(
           width: 360,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 // ---- Edit these ----
 const kEmail = 'protectionofhumanrightforce@gmail.com';
@@ -568,6 +569,7 @@ class Supporters extends StatelessWidget {
     required Widget mark,
     required String name,
     required String detail,
+    Widget? action,
   }) =>
       Container(
         width: double.infinity,
@@ -585,6 +587,10 @@ class Supporters extends StatelessWidget {
             Text(name, style: serif(21)),
             const SizedBox(height: 8),
             Text(detail, style: body(color: muted)),
+            if (action != null) ...[
+              const SizedBox(height: 8),
+              action,
+            ],
           ],
         ),
       );
@@ -623,21 +629,33 @@ class Supporters extends StatelessWidget {
               SizedBox(
                 width: cardWidth,
                 child: supporterCard(
-                  mark: Container(
-                    width: 88,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: navy2,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.volunteer_activism,
-                      color: gold,
-                      size: 42,
-                    ),
+                  mark: Image.asset(
+                    'assets/team/aact_logo.jpeg',
+                    fit: BoxFit.contain,
+                    alignment: Alignment.centerLeft,
                   ),
                   name: 'Arthala Alleiah Charitable Trust',
-                  detail: 'A sponsorship partner of POHRF.',
+                  detail:
+                      'A POHRF sponsorship partner. The Trust’s logo highlights support for education, health and community wellbeing.',
+                  action: TextButton.icon(
+                    onPressed: () async {
+                      final opened = await launchUrl(
+                        Uri.parse(
+                          'https://arthala-alleiah-charitable-trust.onrender.com/',
+                        ),
+                        mode: LaunchMode.externalApplication,
+                      );
+                      if (!opened && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Could not open the Trust website.'),
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.open_in_new),
+                    label: const Text('Visit Trust website'),
+                  ),
                 ),
               ),
               SizedBox(

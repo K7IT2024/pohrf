@@ -69,10 +69,23 @@ const generalCols = <String, List<P>>{
     P('Spiritual Wing Vice President', 'డాక్టర్ ఉమామహేశ్వర రావు', 'Dr. Umamaheswara Rao'),
   ],
 };
+const nationalAdvisors = [
+  P(
+    'National Advisor',
+    'శ్రీ బాగేపల్లి బాలగంగాధర తిలక్',
+    'Sri Bagepalli Balagangadhara Tilak',
+  ),
+  P(
+    'National Honorable President',
+    'శ్రీ D.K. కుమార్',
+    'Sri D.K. Kumar',
+  ),
+];
 const womenCols = <String, List<P>>{
   'General': [
     P('National Working Women\'s President', 'శ్రీమతి G. సంధ్యా రాణి', 'Smt. G. Sandhya Rani'),
     P('National Women\'s Vice President', 'శ్రీమతి లక్ష్మీ కాంతమ్మ', 'Smt. Lakshmi Kanthamma'),
+    P('National Women\'s Convener', 'శ్రీమతి కోట రాధ', 'Smt. Kota Radha'),
   ],
   'Legal': <P>[],
   'Spiritual': <P>[],
@@ -83,6 +96,7 @@ const womenNotes = {
   'Spiritual': 'National women\'s spiritual wing representatives',
 };
 const stateLevel = [
+  P('Andhra Pradesh State Honorable President', 'శ్రీ నాగరం శ్రీరాములు', 'Sri Nagaram Sriramulu'),
   P('AP General President', 'శ్రీ M. బాబు', 'Sri M. Babu'),
   P('AP Women\'s President', 'శ్రీమతి G. బిందు ప్రియ', 'Smt. G. Bindu Priya'),
   P('AP Legal Cell Vice President', 'శ్రీమతి K. విద్యా శ్రీ', 'Smt. K. Vidya Sri'),
@@ -312,6 +326,8 @@ const teamPhotos = <String, String>{
   'arthala_kesavulu': 'kesav.jpeg',
   'arthala_dhanyavani': 'Dhanyavani.jpeg',
   'pattabhi_garu': 'pattabbi.jpeg',
+  'bagepalli_balagangadhara_tilak': 'GangadharTilok.jpeg',
+  'd_k_kumar': 'DK.Kumar.jpeg',
   'g_mohan_kumar': 'Mohankumar.jpeg',
   'jyothi_prakash': 'JyothiPrakash.jpeg',
   'k_ekambaram': 'Ekambaram.jpeg',
@@ -348,6 +364,8 @@ const teamPhotos = <String, String>{
   'k_naresh': 'K.Naresh.jpeg',
   'p_dilli': 'p.Dilli.jpeg',
   'm_siva_ramakrishna': 'SivaRamakrishna.jpeg',
+  'kota_radha': 'Radha.jpeg',
+  'nagaram_sriramulu': 'SreeRamulu.jpeg',
 };
 
 String initials(String en) {
@@ -488,6 +506,34 @@ class Structure extends StatelessWidget {
     ]),
   );
 
+  Widget leadershipCard({
+    required String name,
+    required String title,
+    required String photoName,
+    String? teluguName,
+  }) =>
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: navy,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            Avatar(photoName, size: 88),
+            const SizedBox(height: 10),
+            Text(title, textAlign: TextAlign.center, style: body(size: 13, color: gold)),
+            if (teluguName != null) ...[
+              const SizedBox(height: 6),
+              Text(teluguName, textAlign: TextAlign.center, style: serif(18, color: Colors.white)),
+            ],
+            const SizedBox(height: 4),
+            Text(name, textAlign: TextAlign.center, style: body(w: FontWeight.w700, color: Colors.white)),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final wide = MediaQuery.of(context).size.width > 1000;
@@ -500,23 +546,42 @@ class Structure extends StatelessWidget {
         Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: women)])),
       ]),
     ]);
-    return Column(children: [
-      ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 420),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(22),
-          decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(8)),
-          child: Column(children: [
-            const Avatar('Sri Pattabhi Garu', size: 96),
-            const SizedBox(height: 10),
-            Text('Founder / సంస్థ వ్యవస్థాపకులు', style: body(size: 13, color: gold)),
-            const SizedBox(height: 6),
-            Text('శ్రీ పట్టాభి గారు', style: serif(22, color: Colors.white)),
-            Text('Sri Pattabhi Garu', style: body(w: FontWeight.w700, color: Colors.white)),
-          ]),
+    final leadership = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: leadershipCard(
+              title: 'Founder / సంస్థ వ్యవస్థాపకులు',
+              teluguName: 'శ్రీ పట్టాభి గారు',
+              name: 'Sri Pattabhi Garu',
+              photoName: 'Sri Pattabhi Garu',
+            ),
+          ),
         ),
-      ),
+        for (final advisor in nationalAdvisors)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: leadershipCard(
+                title: advisor.role,
+                name: advisor.en,
+                photoName: advisor.en,
+                teluguName: advisor.te,
+              ),
+            ),
+          ),
+      ],
+    );
+    return Column(children: [
+      if (wide)
+        leadership
+      else
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(width: 1020, child: leadership),
+        ),
       vline(),
       if (!wide)
         Padding(

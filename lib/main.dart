@@ -83,8 +83,8 @@ const nationalAdvisors = [
 ];
 const womenCols = <String, List<P>>{
   'General': [
-    P('National Working Women\'s President', 'శ్రీమతి G. సంధ్యా రాణి', 'Smt. G. Sandhya Rani'),
     P('National Women\'s Vice President', 'శ్రీమతి లక్ష్మీ కాంతమ్మ', 'Smt. Lakshmi Kanthamma'),
+    P('National Working Women\'s President', 'శ్రీమతి G. సంధ్యా రాణి', 'Smt. G. Sandhya Rani'),
     P('National Women\'s Convener', 'శ్రీమతి కోట రాధ', 'Smt. Kota Radha'),
   ],
   'Legal': <P>[],
@@ -546,41 +546,55 @@ class Structure extends StatelessWidget {
         Expanded(child: Column(children: [vline(28), Padding(padding: const EdgeInsets.symmetric(horizontal: 10), child: women)])),
       ]),
     ]);
-    final leadership = Row(
+    final founder = ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 420),
+      child: leadershipCard(
+        title: 'Founder / సంస్థ వ్యవస్థాపకులు',
+        teluguName: 'శ్రీ పట్టాభి గారు',
+        name: 'Sri Pattabhi Garu',
+        photoName: 'Sri Pattabhi Garu',
+      ),
+    );
+    final nationalLeadership = Column(children: [
+      FractionallySizedBox(
+        widthFactor: .5,
+        child: Container(height: 3, color: gold),
+      ),
+      Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: leadershipCard(
-              title: 'Founder / సంస్థ వ్యవస్థాపకులు',
-              teluguName: 'శ్రీ పట్టాభి గారు',
-              name: 'Sri Pattabhi Garu',
-              photoName: 'Sri Pattabhi Garu',
-            ),
-          ),
-        ),
         for (final advisor in nationalAdvisors)
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: leadershipCard(
-                title: advisor.role,
-                name: advisor.en,
-                photoName: advisor.en,
-                teluguName: advisor.te,
+            child: Column(children: [
+              vline(28),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: leadershipCard(
+                  title: advisor.role,
+                  name: advisor.en,
+                  photoName: advisor.en,
+                  teluguName: advisor.te,
+                ),
               ),
-            ),
+            ]),
           ),
       ],
-    );
+      ),
+    ]);
     return Column(children: [
+      founder,
+      vline(),
+      if (!wide)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Text('Swipe horizontally to view national leaders', style: body(size: 13, color: muted)),
+        ),
       if (wide)
-        leadership
+        nationalLeadership
       else
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: SizedBox(width: 1020, child: leadership),
+          child: SizedBox(width: 600, child: nationalLeadership),
         ),
       vline(),
       if (!wide)
@@ -675,16 +689,13 @@ class Supporters extends StatelessWidget {
               SizedBox(
                 width: cardWidth,
                 child: supporterCard(
-                  mark: Container(
-                    width: 88,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: navy,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      'K7',
-                      style: serif(38, color: gold, w: FontWeight.w800),
+                  mark: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Image.asset(
+                      'assets/team/k7infotech_logo.png',
+                      width: 160,
+                      height: 84,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   name: 'K7InfoTech',
@@ -696,6 +707,8 @@ class Supporters extends StatelessWidget {
                 child: supporterCard(
                   mark: Image.asset(
                     'assets/team/aact_logo.jpeg',
+                    width: 160,
+                    height: 84,
                     fit: BoxFit.contain,
                     alignment: Alignment.centerLeft,
                   ),

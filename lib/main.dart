@@ -557,7 +557,7 @@ class Structure extends StatelessWidget {
     );
     final honorable = Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: navy2, width: 2),
@@ -590,7 +590,7 @@ class Structure extends StatelessWidget {
       founder,
       vline(),
       ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 760),
+        constraints: const BoxConstraints(maxWidth: 600),
         child: honorable,
       ),
       vline(),

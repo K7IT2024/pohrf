@@ -590,7 +590,7 @@ class Structure extends StatelessWidget {
       founder,
       vline(),
       ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 600),
+        constraints: const BoxConstraints(maxWidth: 360),
         child: honorable,
       ),
       vline(),

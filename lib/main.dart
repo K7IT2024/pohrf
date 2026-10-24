@@ -71,7 +71,7 @@ const generalCols = <String, List<P>>{
 };
 const nationalAdvisors = [
   P(
-    'National Advisor',
+    'Honorable National Advisor',
     'శ్రీ బాగేపల్లి బాలగంగాధర తిలక్',
     'Sri Bagepalli Balagangadhara Tilak',
   ),
@@ -555,47 +555,44 @@ class Structure extends StatelessWidget {
         photoName: 'Sri Pattabhi Garu',
       ),
     );
-    final nationalLeadership = Column(children: [
-      FractionallySizedBox(
-        widthFactor: .5,
-        child: Container(height: 3, color: gold),
+    final honorable = Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: navy2, width: 2),
+        borderRadius: BorderRadius.circular(8),
       ),
-      Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final advisor in nationalAdvisors)
-          Expanded(
-            child: Column(children: [
-              vline(28),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: leadershipCard(
-                  title: advisor.role,
-                  name: advisor.en,
-                  photoName: advisor.en,
-                  teluguName: advisor.te,
-                ),
-              ),
-            ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            decoration: BoxDecoration(
+              color: navy2,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'HONORABLE',
+              style: body(w: FontWeight.w700, color: Colors.white),
+            ),
           ),
-      ],
+          const SizedBox(height: 8),
+          for (final person in nationalAdvisors)
+            SizedBox(
+              width: double.infinity,
+              child: PersonRow(person),
+            ),
+        ],
       ),
-    ]);
+    );
     return Column(children: [
       founder,
       vline(),
-      if (!wide)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Text('Swipe horizontally to view national leaders', style: body(size: 13, color: muted)),
-        ),
-      if (wide)
-        nationalLeadership
-      else
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(width: 600, child: nationalLeadership),
-        ),
+      ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 760),
+        child: honorable,
+      ),
       vline(),
       if (!wide)
         Padding(
